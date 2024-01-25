@@ -58,12 +58,13 @@ class Apikey extends Action
      * @param MulticurrencyCacheRepository $multicurrencyCacheRepository
      */
     public function __construct(
-        Context $context,
-        JsonFactory $resultJsonFactory,
-        ConfigRepository $configRepository,
-        GingerClient $client,
+        Context                      $context,
+        JsonFactory                  $resultJsonFactory,
+        ConfigRepository             $configRepository,
+        GingerClient                 $client,
         MulticurrencyCacheRepository $multicurrencyCacheRepository
-    ) {
+    )
+    {
         $this->request = $context->getRequest();
         $this->resultJsonFactory = $resultJsonFactory;
         $this->configRepository = $configRepository;
@@ -91,10 +92,11 @@ class Apikey extends Action
 
         try {
             $client = $this->client->get((int)$storeId, $apiKey);
-            if (!$client) {
-                $results[] = '<span class="ginger-error">' . __('Error! '.$apiKey.'Invalid API Key.') . '</span>';
+            if (!$client || !ctype_alnum($apiKey)) {
+                $results[] = '<span class="ginger-error">' . __('Error! ' . $apiKey . ' Invalid API Key.') . '</span>';
                 $success = false;
-            } else {
+            } //            (!ctype_alnum($apiKey) || strpos($apiKey, '<') !== false || strpos($apiKey, '>') !== false)
+            else {
                 $client->getIdealIssuers();
                 $this->multicurrencyCacheRepository->set($client);
                 $results[] = '<span class="ginger-success">' . __('Success!') . '</span>';
@@ -104,6 +106,7 @@ class Apikey extends Action
             $this->configRepository->addTolog('error', $e->getMessage());
             $success = false;
         }
+
 
         return $result->setData(['success' => $success, 'msg' => implode('<br/>', $results)]);
     }

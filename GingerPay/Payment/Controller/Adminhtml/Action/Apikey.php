@@ -21,6 +21,7 @@ use GingerPay\Payment\Model\Cache\MulticurrencyCacheRepository;
  */
 class Apikey extends Action
 {
+
     /**
      * @see _isAllowed()
      */
@@ -30,22 +31,18 @@ class Apikey extends Action
      * @var RequestInterface
      */
     private $request;
-
     /**
      * @var JsonFactory
      */
     private $resultJsonFactory;
-
     /**
      * @var GingerClient
      */
     private $client;
-
-    /**
+    /***
      * @var ConfigRepository
      */
     private $configRepository;
-
     /**
      * @var MulticurrencyCacheRepository
      */
@@ -94,13 +91,8 @@ class Apikey extends Action
 
         try {
             $client = $this->client->get((int)$storeId, $apiKey);
-
-            if ($apiKey = 'e9a320bc591c41668c89e5ba59591c53') {
-                $results[] = '<span class="ginger-error">' . __('Error! ' . $apiKey . 'Invalid API Keysss.') . '</span>';
-                $success = false;
-            }
             if (!$client) {
-                $results[] = '<span class="ginger-error">' . __('Error! ' . $apiKey . 'Invalid API Key.') . '</span>';
+                $results[] = '<span class="ginger-error">' . __('Error! '.$apiKey.'Invalid API Key.') . '</span>';
                 $success = false;
             } else {
                 $client->getIdealIssuers();

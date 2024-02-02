@@ -2,9 +2,12 @@
 
 namespace GingerPay\Payment\Model\Builders;
 
+use GingerPay\Payment\Component\ComponentRegistry;
 use GingerPay\Payment\Model\Methods\Afterpay;
 use GingerPay\Payment\Model\Methods\KlarnaPayLater;
 use GingerPay\Payment\Model\Methods\KlarnaPayNow;
+use GingerPay\Payment\StrategyInterfaces\GetLinesStrategy;
+use GingerPay\Payment\StrategyInterfaces\GetTransactionStrategy;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ProductMetadata;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -193,19 +196,9 @@ class ServiceOrderBuilder
      * @return array
      */
 
-    public function getTransactions($platformCode, $issuer_id = null, $verifiedTermsOfService = null)
+    public function getTransactions($platformCode, $issuer_id = null, $verifiedTermsOfService = null): array
     {
-        return [
-            array_filter([
-                "payment_method"         => $platformCode,
-                "payment_method_details" => array_filter(
-                    [
-                        "issuer_id" => $issuer_id,
-                        "verified_terms_of_service" => $verifiedTermsOfService
-                    ]
-                )
-            ])
-        ];
+        return ComponentRegistry::get(GetTransactionStrategy::class)->getTransactions($platformCode,$issuer_id,$verifiedTermsOfService);
     }
 
     /**
@@ -240,11 +233,12 @@ class ServiceOrderBuilder
     {
         return [
             'user_agent' => $this->getUserAgent(),
-            'platform_name' => 'Magento2',
+            'platform_name' => 'Magento22',
             'platform_version' => $this->productMetadata->getVersion(),
             'plugin_name' => $this->configRepository->getPluginName(),
             'plugin_version' => $this->configRepository->getPluginVersion()
         ];
+//        return ComponentRegistry::get(GetLinesStrategy::class);
     }
 
     /**

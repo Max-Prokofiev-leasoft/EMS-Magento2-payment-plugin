@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace GingerPay\Payment\Model;
 
+use GingerPay\Payment\Model\Builders\ConfigRepositoryBuilder;
 use GingerPay\Payment\Redefiners\Model\ModelBuilderRedefiner;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\Escaper;

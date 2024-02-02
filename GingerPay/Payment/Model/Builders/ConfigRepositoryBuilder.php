@@ -6,11 +6,18 @@ require_once __DIR__.'/ApiBuilder.php';
 require_once __DIR__.'/../../Api/Config/RepositoryInterface.php';
 
 use GingerPay\Payment\Api\Config\RepositoryInterface as ConfigRepositoryInterface;
+use GingerPay\Payment\Component\ComponentRegistry;
 use GingerPay\Payment\Model\Methods\Afterpay;
 use GingerPay\Payment\Model\Methods\KlarnaPayLater;
+use GingerPay\Payment\Strategies\CustomGetTransactionStrategy;
+use GingerPay\Payment\Strategies\DefaultGetLinesStrategy;
+use GingerPay\Payment\Strategies\DefaultGetTransactionStrategy;
+use GingerPay\Payment\StrategyInterfaces\GetLinesStrategy;
+use GingerPay\Payment\StrategyInterfaces\GetTransactionStrategy;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
+use GingerPay\Payment\Model\Builders\ServiceOrderBuilder;
 
 class ConfigRepositoryBuilder extends ApiBuilder implements ConfigRepositoryInterface
 {
@@ -443,4 +450,9 @@ class ConfigRepositoryBuilder extends ApiBuilder implements ConfigRepositoryInte
     {
         return (bool)$this->getFlag(self::XML_PATH_IMAGES);
     }
+    public static function registerStrategies(): void
+    {
+        ComponentRegistry::register(GetTransactionStrategy::class,new DefaultGetTransactionStrategy());
+    }
 }
+

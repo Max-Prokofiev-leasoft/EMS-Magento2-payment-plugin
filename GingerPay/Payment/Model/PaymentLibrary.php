@@ -11,6 +11,7 @@ use Exception;
 use GingerPay\Payment\Api\Config\RepositoryInterface as ConfigRepository;
 use GingerPay\Payment\Model\Api\GingerClient;
 use GingerPay\Payment\Model\Api\UrlProvider;
+use GingerPay\Payment\Model\Builders\ConfigRepositoryBuilder;
 use GingerPay\Payment\Service\Order\CustomerData;
 use GingerPay\Payment\Service\Order\GetOrderByTransaction;
 use GingerPay\Payment\Service\Order\OrderLines;
@@ -195,6 +196,7 @@ class PaymentLibrary extends AbstractMethod
             $resourceCollection,
             $data
         );
+        ConfigRepositoryBuilder::registerStrategies();
         $this->configRepository = $configRepository;
         $this->gingerClient = $gingerClient;
         $this->processTransactionRequest = $processTransactionRequest;

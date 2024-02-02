@@ -34,11 +34,11 @@ class ApiBuilder
      * @var string
      */
     protected $endpoint = null;
-    
+
     /**
      * Endpoint
      */
-    const ENDPOINT = 'https://api.dev.gingerpayments.com';
+    const ENDPOINT = 'https://api.dev.gingerpayments.com/';
 
     /**
      * Ginger
